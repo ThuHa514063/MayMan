@@ -3,22 +3,23 @@ import random
 import time
 
 # --- CẤU HÌNH TRANG ---
-st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout="centered")
+st.set_page_config(page_title="Gieo Quẻ Bính Ngọ 2026", page_icon="🧧", layout="centered")
 
 # --- KHỞI TẠO DỮ LIỆU ---
 if 'lucky_list' not in st.session_state:
     st.session_state.lucky_list = []
+if 'wishes_list' not in st.session_state:
+    st.session_state.wishes_list = []
 if 'state' not in st.session_state:
-    st.session_state.state = 'home'  # Bắt đầu tại trang Home
+    st.session_state.state = 'home'
 if 'current_user' not in st.session_state:
     st.session_state.current_user = ""
 
-# --- CSS TÙY CHỈNH (TRANG TRÍ LẠI TRANG CHỦ & MENU) ---
+# --- CSS TÙY CHỈNH ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lexend:wght@400;900&family=Sriracha&display=swap');
 
-    /* Hình nền và lớp phủ */
     .stApp {
         background: url("https://image.dienthoaivui.com.vn/x,webp,q90/https://dashboard.dienthoaivui.com.vn/uploads/dashboard/editor_upload/background-tet-050.jpg");
         background-size: cover; background-position: center; background-attachment: fixed;
@@ -28,44 +29,26 @@ st.markdown("""
         background: rgba(0, 0, 0, 0.4); z-index: 0;
     }
 
-    /* Container chính */
     .main-box { z-index: 1; position: relative; max-width: 600px; margin: auto; padding-top: 20px; font-family: 'Lexend', sans-serif; }
 
-    /* Tiêu đề chính lấp lánh */
     .title-tet {
         font-family: 'Dancing Script', cursive;
         color: #ffeb3b; text-align: center; font-size: 3.8rem; font-weight: bold;
         text-shadow: 0 0 10px #ffeb3b, 3px 3px 15px #000; margin-bottom: 20px;
     }
 
-    /* Thiết kế lại Box trang chủ */
     .home-container {
-        border: 4px solid #ffd700;
-        background: rgba(183, 28, 28, 0.9);
-        padding: 30px;
-        border-radius: 25px;
-        text-align: center;
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-        position: relative;
-        overflow: hidden;
+        border: 4px solid #ffd700; background: rgba(183, 28, 28, 0.9);
+        padding: 30px; border-radius: 25px; text-align: center;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); position: relative; overflow: hidden;
     }
-    .home-container::before {
-        content: "🧧"; position: absolute; top: 10px; left: 10px; font-size: 30px; opacity: 0.5;
-    }
-    .home-container::after {
-        content: "🧧"; position: absolute; bottom: 10px; right: 10px; font-size: 30px; opacity: 0.5;
-    }
+    .home-container::before { content: "🧧"; position: absolute; top: 10px; left: 10px; font-size: 30px; opacity: 0.5; }
+    .home-container::after { content: "🧧"; position: absolute; bottom: 10px; right: 10px; font-size: 30px; opacity: 0.5; }
 
-    .home-box h2 {
-        font-family: 'Sriracha', cursive;
-        color: #ffd700; font-size: 2rem; margin-bottom: 15px;
-    }
-    .home-box p {
-        color: #fff !important; font-size: 1.2rem !important; line-height: 1.5;
-        text-shadow: none !important; margin-bottom: 10px;
-    }
+    .home-box h2 { font-family: 'Sriracha', cursive; color: #ffd700; font-size: 2rem; margin-bottom: 15px; }
+    .home-box p { color: #fff !important; font-size: 1.2rem !important; line-height: 1.5; text-shadow: none !important; margin-bottom: 10px; }
 
-    /* Các thành phần result-card */
+    /* Result Card giữ nguyên link ảnh và cấu trúc */
     .result-card {
         display: flex; background: white; border: 6px solid #ffd700;
         border-radius: 20px; width: 100%; height: 320px;
@@ -87,7 +70,6 @@ st.markdown("""
     .image-bottom { flex: 1.5; padding: 10px; display: flex; justify-content: center; align-items: center; }
     .image-bottom img { max-height: 150px; width: auto; }
 
-    /* List scroll */
     .list-scroll {
         background: rgba(255, 255, 255, 0.9); border-radius: 15px;
         padding: 10px; max-height: 300px; overflow-y: auto; border: 4px solid #ffd700;
@@ -98,27 +80,25 @@ st.markdown("""
     }
     .gift-label { background: #d32f2f; color: #ffeb3b; padding: 2px 10px; border-radius: 5px; font-size: 0.9rem; }
 
+    /* Sticky note cho lời chúc */
+    .wish-note {
+        background: #fff9c4; color: #b71c1c; padding: 15px; border-radius: 10px;
+        border-left: 5px solid #ffd700; margin-bottom: 12px; 
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    }
+
     .stMarkdown p, label { color: white !important; font-size: 1.1rem !important; text-shadow: 1px 1px 3px black; }
     
-    /* Hiệu ứng rơi rơi */
+    /* Hiệu ứng rơi */
     .petal, .lixi { position: fixed; top: -10%; z-index: 9999; animation: fall linear infinite; font-size: 25px; pointer-events: none; }
     @keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
     
     .shaker { font-size: 100px; text-align: center; margin: 20px; animation: shake 0.2s infinite; }
     @keyframes shake { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
 
-    /* Trang trí Menu Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #b71c1c;
-        border-right: 3px solid #ffd700;
-    }
-    [data-testid="stSidebar"] .stMarkdown h3 {
-        color: #ffd700 !important;
-        font-family: 'Sriracha', cursive;
-        text-align: center;
-        border-bottom: 2px solid #ffd700;
-        padding-bottom: 10px;
-    }
+    /* Sidebar Tết */
+    [data-testid="stSidebar"] { background-color: #b71c1c; border-right: 3px solid #ffd700; }
+    [data-testid="stSidebar"] .stMarkdown h3 { color: #ffd700 !important; font-family: 'Sriracha', cursive; text-align: center; border-bottom: 2px solid #ffd700; padding-bottom: 10px; }
     </style>
 
     <div class="petal" style="left:5%; animation-duration:8s;">🌸</div>
@@ -126,13 +106,14 @@ st.markdown("""
     <div class="petal" style="left:45%; animation-duration:10s;">🌸</div>
     <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
     <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
-    <div class="lixi" style="left:15%; animation-duration:10s;">🧧</div>
-    <div class="petal" style="left:75%; animation-duration:7s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
+    <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
 """, unsafe_allow_html=True)
 
 # --- MENU NỔI (SIDEBAR) ---
 with st.sidebar:
-    st.markdown("### 🏮 DANH MỤC")
+    st.markdown("### 🏮 MENU BÍNH NGỌ")
     st.write("")
     if st.button("🏠 Trang Chủ", use_container_width=True):
         st.session_state.state = 'home'
@@ -143,20 +124,23 @@ with st.sidebar:
     if st.button("📝 Bảng Vàng", use_container_width=True):
         st.session_state.state = 'view_list'
         st.rerun()
+    if st.button("💌 Gửi Lại Lời Chúc", use_container_width=True):
+        st.session_state.state = 'send_wishes'
+        st.rerun()
     st.write("---")
-    st.caption("Chúc mừng năm mới 2026! 🐎")
+    st.caption("Chúc mừng năm mới Bính Ngọ 2026! 🐎")
 
 # --- LOGIC CHÍNH ---
 st.markdown('<div class="main-box">', unsafe_allow_html=True)
 
-# 1. TRANG CHỦ (HOME)
+# 1. TRANG CHỦ
 if st.session_state.state == 'home':
-    st.markdown('<div class="title-tet">Chúc mừng năm mới 2026</div>', unsafe_allow_html=True)
+    st.markdown('<div class="title-tet">Mừng Xuân Bính Ngọ 2026</div>', unsafe_allow_html=True)
     st.markdown("""
         <div class="home-container">
             <div class="home-box">
                 <h2>🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
-                <p>Đầu xuân Bính Ngọ, chúc bạn vạn sự hanh thông!</p>
+                <p>Năm mới Bính Ngọ sang, chúc bạn vạn sự hanh thông!</p>
                 <p>Cùng gieo quẻ đầu năm để nhận lộc may mắn nhé.</p>
                 <br>
             </div>
@@ -180,17 +164,13 @@ elif st.session_state.state == 'input_name':
                 st.session_state.state = 'shaking'
                 st.rerun()
             else:
-                st.error("Nhập tên đã bạn iu ơi!")
+                st.error("Nhập tên đã bồ ơi!")
     with col2:
-        if st.button("📝 BẢNG VÀNG MAY MẮN", use_container_width=True):
+        if st.button("📝 BẢNG VÀNG", use_container_width=True):
             st.session_state.state = 'view_list'
             st.rerun()
-    
-    if st.button("🏠 VỀ TRANG CHỦ", use_container_width=True):
-        st.session_state.state = 'home'
-        st.rerun()
 
-# 3. TRANG ĐANG LẮC
+# 3. TRANG ĐANG LẮC (GIỮ NGUYÊN DANH SÁCH QUÀ & LINK)
 elif st.session_state.state == 'shaking':
     st.markdown(f'<div class="title-tet">Đang lắc cho {st.session_state.current_user}</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker">🏺</div>', unsafe_allow_html=True)
@@ -235,16 +215,9 @@ elif st.session_state.state == 'result':
             </div>
         </div>
     """, unsafe_allow_html=True)
-
-    c1, c2 = st.columns(2)
-    with c1:
-        if st.button("🧧 LẮC TIẾP", use_container_width=True):
-            st.session_state.state = 'input_name'
-            st.rerun()
-    with c2:
-        if st.button("📝 BẢNG VÀNG MAY MẮN", use_container_width=True):
-            st.session_state.state = 'view_list'
-            st.rerun()
+    if st.button("🧧 LẮC TIẾP", use_container_width=True):
+        st.session_state.state = 'input_name'
+        st.rerun()
 
 # 5. TRANG BẢNG VÀNG
 elif st.session_state.state == 'view_list':
@@ -255,21 +228,23 @@ elif st.session_state.state == 'view_list':
             list_html += f'<div class="list-row"><span>👤 {item["Tên"]}</span><span class="gift-label">{item["Quà"]}</span><span>🕒 {item["Giờ"]}</span></div>'
         list_html += '</div>'
         st.markdown(list_html, unsafe_allow_html=True)
-        st.write("")
-        if st.button("🗑️ RESET BẢNG VÀNG MAY MẮN", use_container_width=True):
-            st.session_state.lucky_list = []
-            st.rerun()
     else:
-        st.markdown('<p style="text-align:center; color:white;">Chưa có ai may mắn cả!</p>', unsafe_allow_html=True)
+        st.markdown('<p style="text-align:center;">Chưa có ai may mắn cả!</p>', unsafe_allow_html=True)
 
-    col_back1, col_back2 = st.columns(2)
-    with col_back1:
-        if st.button("⬅️ QUAY LẠI", use_container_width=True):
-            st.session_state.state = 'input_name'
-            st.rerun()
-    with col_back2:
-        if st.button("🏠 VỀ TRANG CHỦ", use_container_width=True):
-            st.session_state.state = 'home'
-            st.rerun()
+# 6. TRANG GỬI LỜI CHÚC (MỚI)
+elif st.session_state.state == 'send_wishes':
+    st.markdown('<div class="title-tet">Gửi Lời Chúc Xuân</div>', unsafe_allow_html=True)
+    with st.container():
+        u_name = st.text_input("Tên của bạn:", value=st.session_state.current_user)
+        u_wish = st.text_area("Lời chúc của bạn:")
+        if st.button("💌 GỬI LỜI CHÚC", use_container_width=True):
+            if u_name and u_wish:
+                st.session_state.wishes_list.insert(0, {"name": u_name, "wish": u_wish})
+                st.success("Gửi thành công!")
+                st.rerun()
+
+    st.write("---")
+    for w in st.session_state.wishes_list:
+        st.markdown(f'<div class="wish-note"><b>{w["name"]}:</b> {w["wish"]}</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
