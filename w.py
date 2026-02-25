@@ -5,10 +5,9 @@ import time
 # --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout="centered")
 
-# --- CSS & JS NÂNG CAO ---
+# --- CSS & JS: PHÁO HOA + HOA ĐÀO/LÌ XÌ RƠI ---
 st.markdown("""
     <style>
-    /* Nền đỏ Tết */
     .stApp {
         background: radial-gradient(circle, #b71c1c 0%, #7f0000 100%);
         overflow: hidden;
@@ -28,22 +27,15 @@ st.markdown("""
 
     /* Hiệu ứng HOA ĐÀO & LÌ XÌ RƠI */
     .falling-item {
-        position: fixed;
-        top: -50px;
-        z-index: 9999;
-        pointer-events: none;
+        position: fixed; top: -50px; z-index: 9999; pointer-events: none;
         animation: fall-and-spin linear infinite;
     }
-
     @keyframes fall-and-spin {
         0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 1; }
-        25% { transform: translateY(25vh) rotate(90deg) translateX(15px); }
-        50% { transform: translateY(50vh) rotate(180deg) translateX(-15px); }
-        75% { transform: translateY(75vh) rotate(270deg) translateX(15px); }
-        100% { transform: translateY(105vh) rotate(360deg) translateX(0); opacity: 0.3; }
+        100% { transform: translateY(105vh) rotate(360deg) translateX(20px); opacity: 0.3; }
     }
 
-    /* LAYOUT KẾT QUẢ */
+    /* LAYOUT KẾT QUẢ THEO PHÁC THẢO */
     .result-container {
         display: flex; background: white; border: 6px solid #ffd700;
         border-radius: 15px; width: 100%; max-width: 450px;
@@ -68,8 +60,9 @@ st.markdown("""
     </style>
 
     <script>
+    // Tạo hoa đào và lì xì rơi
     function spawnItems() {
-        const items = ['🌸', '🌸', '🧧', '🌸', '🧧']; // Tỷ lệ hoa đào nhiều hơn lì xì
+        const items = ['🌸', '🧧', '🌸'];
         const item = document.createElement('div');
         item.className = 'falling-item';
         item.innerText = items[Math.floor(Math.random() * items.length)];
@@ -79,15 +72,37 @@ st.markdown("""
         document.body.appendChild(item);
         setTimeout(() => { item.remove(); }, 7000);
     }
-    setInterval(spawnItems, 200); // Tạo item mỗi 0.2 giây
+    setInterval(spawnItems, 300);
     </script>
     """, unsafe_allow_html=True)
 
-# --- HÀM ÂM THANH ---
+# --- HÀM PHÁO HOA (Thay thế cho bóng bay) ---
+def firecrackers_effect():
+    st.components.v1.html("""
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+        <script>
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+              if (timeLeft <= 0) { return clearInterval(interval); }
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        </script>
+    """, height=0)
+
 def play_sound(url):
     st.markdown(f'<audio autoplay><source src="{url}" type="audio/mp3"></audio>', unsafe_allow_html=True)
 
-# --- LOGIC ---
+# --- LOGIC CHƯƠNG TRÌNH ---
 if 'page' not in st.session_state:
     st.session_state.page = 'home'
 
@@ -108,19 +123,17 @@ if st.session_state.page == 'home':
 elif st.session_state.page == 'shaking':
     st.markdown('<div class="title-tet">ĐANG XÓC QUẺ...</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker-box shaking-active">🏺</div>', unsafe_allow_html=True)
-    
-    # Âm thanh xóc quẻ (Tiếng gỗ lách cách)
     play_sound("https://www.soundjay.com/misc/sounds/shaking-dice-1.mp3")
-    
-    time.sleep(3) # Xóc trong 3 giây cho hồi hộp
+    time.sleep(3)
     st.session_state.result = random.choice(data)
     st.session_state.page = 'result'
     st.rerun()
 
 elif st.session_state.page == 'result':
     st.markdown('<div class="title-tet">QUẺ CỦA BẠN</div>', unsafe_allow_html=True)
-    res = st.session_state.result
+    firecrackers_effect() # Gọi hiệu ứng pháo hoa thay cho bóng bay
     
+    res = st.session_state.result
     st.markdown(f"""
         <div class="result-container">
             <div class="card-left">{res['money']}</div>
@@ -131,8 +144,6 @@ elif st.session_state.page == 'result':
         </div>
     """, unsafe_allow_html=True)
     
-    # Nút gieo lại
     if st.button("🧧 XIN QUẺ LẠI"):
         st.session_state.page = 'home'
         st.rerun()
-    st.balloons()
