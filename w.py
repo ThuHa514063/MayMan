@@ -13,11 +13,12 @@ if 'state' not in st.session_state:
 if 'current_user' not in st.session_state:
     st.session_state.current_user = ""
 
-# --- CSS TÙY CHỈNH (TRANG TRÍ LẠI TRANG CHỦ) ---
+# --- CSS TÙY CHỈNH (TRANG TRÍ LẠI TRANG CHỦ & MENU) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lexend:wght@400;900&family=Sriracha&display=swap');
 
+    /* Hình nền và lớp phủ */
     .stApp {
         background: url("https://image.dienthoaivui.com.vn/x,webp,q90/https://dashboard.dienthoaivui.com.vn/uploads/dashboard/editor_upload/background-tet-050.jpg");
         background-size: cover; background-position: center; background-attachment: fixed;
@@ -27,6 +28,7 @@ st.markdown("""
         background: rgba(0, 0, 0, 0.4); z-index: 0;
     }
 
+    /* Container chính */
     .main-box { z-index: 1; position: relative; max-width: 600px; margin: auto; padding-top: 20px; font-family: 'Lexend', sans-serif; }
 
     /* Tiêu đề chính lấp lánh */
@@ -63,7 +65,7 @@ st.markdown("""
         text-shadow: none !important; margin-bottom: 10px;
     }
 
-    /* Giữ nguyên các thành phần result-card của bạn */
+    /* Các thành phần result-card */
     .result-card {
         display: flex; background: white; border: 6px solid #ffd700;
         border-radius: 20px; width: 100%; height: 320px;
@@ -85,7 +87,7 @@ st.markdown("""
     .image-bottom { flex: 1.5; padding: 10px; display: flex; justify-content: center; align-items: center; }
     .image-bottom img { max-height: 150px; width: auto; }
 
-    /* List scroll giữ nguyên */
+    /* List scroll */
     .list-scroll {
         background: rgba(255, 255, 255, 0.9); border-radius: 15px;
         padding: 10px; max-height: 300px; overflow-y: auto; border: 4px solid #ffd700;
@@ -104,6 +106,19 @@ st.markdown("""
     
     .shaker { font-size: 100px; text-align: center; margin: 20px; animation: shake 0.2s infinite; }
     @keyframes shake { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
+
+    /* Trang trí Menu Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #b71c1c;
+        border-right: 3px solid #ffd700;
+    }
+    [data-testid="stSidebar"] .stMarkdown h3 {
+        color: #ffd700 !important;
+        font-family: 'Sriracha', cursive;
+        text-align: center;
+        border-bottom: 2px solid #ffd700;
+        padding-bottom: 10px;
+    }
     </style>
 
     <div class="petal" style="left:5%; animation-duration:8s;">🌸</div>
@@ -115,17 +130,33 @@ st.markdown("""
     <div class="petal" style="left:75%; animation-duration:7s;">🌸</div>
 """, unsafe_allow_html=True)
 
-# --- LOGIC ---
+# --- MENU NỔI (SIDEBAR) ---
+with st.sidebar:
+    st.markdown("### 🏮 DANH MỤC")
+    st.write("")
+    if st.button("🏠 Trang Chủ", use_container_width=True):
+        st.session_state.state = 'home'
+        st.rerun()
+    if st.button("🧧 Gieo Quẻ Ngay", use_container_width=True):
+        st.session_state.state = 'input_name'
+        st.rerun()
+    if st.button("📝 Bảng Vàng", use_container_width=True):
+        st.session_state.state = 'view_list'
+        st.rerun()
+    st.write("---")
+    st.caption("Chúc mừng năm mới 2026! 🐍")
+
+# --- LOGIC CHÍNH ---
 st.markdown('<div class="main-box">', unsafe_allow_html=True)
 
-# 1. TRANG CHỦ (HOME) - ĐÃ TRANG TRÍ LẠI
+# 1. TRANG CHỦ (HOME)
 if st.session_state.state == 'home':
     st.markdown('<div class="title-tet">Chúc mừng năm mới 2026</div>', unsafe_allow_html=True)
     st.markdown("""
         <div class="home-container">
             <div class="home-box">
                 <h2>🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
-                <p>Đầu xuân Bính Ngọ, chúc bạn vạn sự hanh thông!</p>
+                <p>Đầu xuân Ất Tỵ, chúc bạn vạn sự hanh thông!</p>
                 <p>Cùng gieo quẻ đầu năm để nhận lộc may mắn nhé.</p>
                 <br>
             </div>
@@ -136,7 +167,7 @@ if st.session_state.state == 'home':
         st.session_state.state = 'input_name'
         st.rerun()
 
-# 2. TRANG NHẬP TÊN (Giữ nguyên link icon & thành phần)
+# 2. TRANG NHẬP TÊN
 elif st.session_state.state == 'input_name':
     st.markdown('<div class="title-tet">Gieo Quẻ Khai Xuân</div>', unsafe_allow_html=True)
     name = st.text_input("Nhập tên để nhận lộc:", placeholder="Tên của bạn...", key="name_input")
@@ -159,7 +190,7 @@ elif st.session_state.state == 'input_name':
         st.session_state.state = 'home'
         st.rerun()
 
-# 3. TRANG ĐANG LẮC (Giữ nguyên)
+# 3. TRANG ĐANG LẮC
 elif st.session_state.state == 'shaking':
     st.markdown(f'<div class="title-tet">Đang lắc cho {st.session_state.current_user}</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker">🏺</div>', unsafe_allow_html=True)
@@ -191,7 +222,7 @@ elif st.session_state.state == 'shaking':
     st.session_state.state = 'result'
     st.rerun()
 
-# 4. TRANG KẾT QUẢ (Giữ nguyên)
+# 4. TRANG KẾT QUẢ
 elif st.session_state.state == 'result':
     st.markdown(f'<div class="title-tet">Chúc mừng {st.session_state.current_user}</div>', unsafe_allow_html=True)
     res = st.session_state.result
@@ -215,7 +246,7 @@ elif st.session_state.state == 'result':
             st.session_state.state = 'view_list'
             st.rerun()
 
-# 5. TRANG BẢNG VÀNG (Giữ nguyên)
+# 5. TRANG BẢNG VÀNG
 elif st.session_state.state == 'view_list':
     st.markdown('<div class="title-tet">Bảng Vàng May Mắn</div>', unsafe_allow_html=True)
     if st.session_state.lucky_list:
