@@ -116,7 +116,7 @@ if st.session_state.state == 'input_name':
             else:
                 st.error("Nhập tên đã bạn iu ơi!")
     with col2:
-        if st.button("📝 DS MAY MẮN", use_container_width=True):
+        if st.button("📝 BẢNG VÀNG MAY MẮN", use_container_width=True):
             st.session_state.state = 'view_list'
             st.rerun()
 
@@ -135,15 +135,15 @@ elif st.session_state.state == 'shaking':
         {"gift": "Bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
         {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "Socola", "wish": "Tình Duyên Viên Mãn", "img": "https://cdn-icons-png.flaticon.com/512/2576/2576762.png"},
-        {"gift": "1K", "wish": "Vạn Sự Như Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
+        {"gift": "1K", "wish": "Hạnh Phúc An Khang", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
         {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "https://cdn-icons-png.flaticon.com/512/3225/3225096.png"},
-        {"gift": "2K", "wish": "Cát Tường Như Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
-        {"gift": "10K", "wish": "Tiền Vào Như Nước", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "20K", "wish": "Làm Ăn Phát Đạt", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "Bánh quy", "wish": "Ngọt Ngào Cả Năm", "img": "https://cdn-icons-png.flaticon.com/512/541/541732.png"},
-        {"gift": "Bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
+        {"gift": "2K", "wish": "Mã Đáo Thành Công", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
+        {"gift": "10K", "wish": "Phát tài phát lộc – Công thành danh toại", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
+        {"gift": "20K", "wish": "Phú Quý Cát Tường", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
+        {"gift": "Bánh quy", "wish": "NLộc tràn xuân mới – Niềm vui phơi phới", "img": "https://cdn-icons-png.flaticon.com/512/541/541732.png"},
+        {"gift": "Bánh bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
         {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "Socola", "wish": "Tình Duyên Viên Mãn", "img": "https://cdn-icons-png.flaticon.com/512/2576/2576762.png"},
+        {"gift": "Socola", "wish": "Ngàn lần như ý – Vạn sự như mơ", "img": "https://cdn-icons-png.flaticon.com/512/2576/2576762.png"},
     ]
     result = random.choice(data)
     st.session_state.result = result
@@ -171,7 +171,7 @@ elif st.session_state.state == 'result':
             st.session_state.state = 'input_name'
             st.rerun()
     with c2:
-        if st.button("📝 DANH SÁCH", use_container_width=True):
+        if st.button("📝 BẢNG VÀNG MAY MẮN", use_container_width=True):
             st.session_state.state = 'view_list'
             st.rerun()
 
@@ -184,7 +184,7 @@ elif st.session_state.state == 'view_list':
         list_html += '</div>'
         st.markdown(list_html, unsafe_allow_html=True)
         st.write("")
-        if st.button("🗑️ RESET DANH SÁCH", use_container_width=True):
+        if st.button("🗑️ RESET BẢNG VÀNG MAY MẮN", use_container_width=True):
             st.session_state.lucky_list = []
             st.rerun()
     else:
