@@ -142,6 +142,11 @@ elif st.session_state.state == 'input_name':
         if st.button("📝 BẢNG VÀNG MAY MẮN", use_container_width=True):
             st.session_state.state = 'view_list'
             st.rerun()
+    
+    # NÚT VỀ TRANG CHỦ
+    if st.button("🏠 VỀ TRANG CHỦ", use_container_width=True):
+        st.session_state.state = 'home'
+        st.rerun()
 
 # 3. TRANG ĐANG LẮC
 elif st.session_state.state == 'shaking':
@@ -215,8 +220,15 @@ elif st.session_state.state == 'view_list':
     else:
         st.markdown('<p style="text-align:center; color:white;">Chưa có ai may mắn cả!</p>', unsafe_allow_html=True)
 
-    if st.button("⬅️ QUAY LẠI", use_container_width=True):
-        st.session_state.state = 'input_name'
-        st.rerun()
+    # CỘT NÚT ĐIỀU HƯỚNG
+    col_back1, col_back2 = st.columns(2)
+    with col_back1:
+        if st.button("⬅️ QUAY LẠI", use_container_width=True):
+            st.session_state.state = 'input_name'
+            st.rerun()
+    with col_back2:
+        if st.button("🏠 VỀ TRANG CHỦ", use_container_width=True):
+            st.session_state.state = 'home'
+            st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
