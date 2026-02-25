@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import time
+import pandas as pd
 
 # --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout="centered")
@@ -26,71 +27,73 @@ st.markdown("""
         background: rgba(0, 0, 0, 0.4); z-index: 0;
     }
 
-    /* Hoa đào & Lì xì rơi */
+    /* Hiệu ứng rơi */
     .petal, .lixi {
         position: fixed; top: -10%; user-select: none; pointer-events: none; z-index: 9999;
         animation: fall linear infinite; font-size: 25px;
     }
     @keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
 
-    /* Box nội dung chính - Giữ kích thước vừa phải */
-    .main-box {
-        z-index: 1; position: relative; max-width: 600px; margin: auto; padding-top: 20px;
-    }
+    /* Box nội dung chính */
+    .main-box { z-index: 1; position: relative; max-width: 700px; margin: auto; padding: 10px; }
 
     .title-tet {
-        color: #ffeb3b; text-align: center; font-size: 2.5rem; font-weight: bold;
-        text-shadow: 2px 2px 10px #000; margin-bottom: 20px;
+        color: #ffeb3b; text-align: center; font-size: 2.8rem; font-weight: bold;
+        text-shadow: 3px 3px 12px #000; margin-bottom: 25px;
     }
 
-    /* SỬA MÀU THÔNG BÁO LỖI (st.error) CHO DỄ ĐỌC */
-    .stAlert {
-        background-color: rgba(255, 255, 255, 0.9) !important;
-        border: 2px solid #ff4b4b !important;
-    }
-    .stAlert div { color: #b71c1c !important; font-weight: bold !important; font-size: 1.1rem !important; }
-
-    /* KHUNG KẾT QUẢ - HÌNH CHỮ NHẬT NGANG (TO) */
+    /* KHUNG KẾT QUẢ HÌNH CHỮ NHẬT NGANG */
     .result-card {
         display: flex; background: white; border: 6px solid #ffd700;
-        border-radius: 20px; width: 100%; height: 320px; /* Cố định chiều cao để ra hình chữ nhật */
+        border-radius: 20px; width: 100%; height: 320px;
         margin: 20px auto; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
     }
-    
-    /* Bên trái: Hiện quà tặng xoay dọc */
     .card-left {
-        flex: 0.7; background: #d32f2f; color: #ffeb3b; 
+        flex: 0.8; background: #d32f2f; color: #ffeb3b; 
         writing-mode: vertical-rl; text-orientation: upright;
         display: flex; align-items: center; justify-content: center;
         font-size: 3.5rem; font-weight: 900; padding: 10px; border-right: 5px solid #ffd700;
         text-shadow: 2px 2px 0px #000;
     }
-    
     .card-right { flex: 3; display: flex; flex-direction: column; background-color: #fffaf0; }
-    
-    /* Lời chúc bên trên */
     .wish-top {
         flex: 1; padding: 15px; font-size: 2rem; font-weight: 800; color: #b71c1c;
         border-bottom: 3px dashed #d32f2f; text-align: center;
         display: flex; align-items: center; justify-content: center;
     }
-    /* Hình ảnh bên dưới */
     .image-bottom { flex: 1.5; padding: 10px; display: flex; justify-content: center; align-items: center; }
-    .image-bottom img { max-height: 160px; width: auto; }
+    .image-bottom img { max-height: 160px; }
 
-    /* Shaker ống quẻ */
-    .shaker { font-size: 100px; text-align: center; margin: 10px auto; }
-    .shake-anim { animation: shake 0.1s infinite; }
-    @keyframes shake { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
-    
-    /* Label text màu trắng cho dễ nhìn */
+    /* TRANG TRÍ BẢNG DANH SÁCH */
+    .list-container {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 15px;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 3px solid #ffd700;
+    }
+    .list-item {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 10px; border-bottom: 1px solid #ddd;
+        color: #b71c1c; font-weight: bold; font-size: 1.1rem;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .gift-tag { background: #d32f2f; color: #ffeb3b; padding: 2px 10px; border-radius: 5px; }
+
+    /* Nút Reset */
+    .stButton>button[kind="secondary"] {
+        background-color: #333 !important; color: white !important;
+        border: 1px solid #555 !important;
+    }
+
+    /* Các văn bản khác */
     .stMarkdown p, label { color: white !important; font-size: 1.1rem !important; text-shadow: 1px 1px 3px black; }
     </style>
 
     <div class="petal" style="left:10%; animation-duration:8s;">🌸</div>
-    <div class="lixi" style="left:35%; animation-duration:11s;">🧧</div>
-    <div class="petal" style="left:65%; animation-duration:10s;">🌸</div>
-    <div class="lixi" style="left:85%; animation-duration:9s;">🧧</div>
+    <div class="lixi" style="left:40%; animation-duration:11s;">🧧</div>
+    <div class="petal" style="left:70%; animation-duration:9s;">🌸</div>
 """, unsafe_allow_html=True)
 
 # --- LOGIC ---
@@ -98,28 +101,27 @@ st.markdown('<div class="main-box">', unsafe_allow_html=True)
 
 if st.session_state.state == 'input_name':
     st.markdown('<div class="title-tet">🧧 GIEO QUẺ KHAI XUÂN 🧧</div>', unsafe_allow_html=True)
-    name = st.text_input("Nhập tên để nhận lộc:", placeholder="Tên của bạn...", key="name_input")
+    name = st.text_input("📝 NHẬP TÊN CỦA BẠN:", placeholder="Ví dụ: Anh Ba, Chị Bảy...", key="name_input")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🏮 VÀO LẮC QUẺ", use_container_width=True):
-            if name:
-                st.session_state.current_user = name
-                st.session_state.state = 'shaking'
-                st.rerun()
-            else:
-                st.error("Nhập tên đã bồ tèo ơi!") # Đã sửa màu dễ đọc
-    with col2:
-        if st.button("📝 DS MAY MẮN", use_container_width=True):
-            st.session_state.state = 'view_list'
+    st.write("")
+    if st.button("🏮 BẮT ĐẦU LẮC QUẺ", use_container_width=True):
+        if name:
+            st.session_state.current_user = name
+            st.session_state.state = 'shaking'
             st.rerun()
+        else:
+            st.error("⚠️ Nhập tên đã bồ tèo ơi!")
+    
+    if st.button("📝 XEM DANH SÁCH MAY MẮN", use_container_width=True):
+        st.session_state.state = 'view_list'
+        st.rerun()
 
 elif st.session_state.state == 'shaking':
     st.markdown(f'<div class="title-tet">ĐANG LẮC CHO {st.session_state.current_user.upper()}</div>', unsafe_allow_html=True)
-    st.markdown('<div class="shaker shake-anim">🏺</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size:120px; text-align:center;">🏺</div>', unsafe_allow_html=True)
     st.markdown('<audio autoplay><source src="https://www.soundjay.com/misc/sounds/shaking-dice-1.mp3" type="audio/mp3"></audio>', unsafe_allow_html=True)
     
-    time.sleep(2.5)
+    time.sleep(2)
     data = [
         {"gift": "50K", "wish": "VẠN SỰ NHƯ Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
         {"gift": "100K", "wish": "TIỀN VÀO NHƯ NƯỚC", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
@@ -128,7 +130,7 @@ elif st.session_state.state == 'shaking':
     ]
     result = random.choice(data)
     st.session_state.result = result
-    st.session_state.lucky_list.append({"Tên": st.session_state.current_user, "Quà": result['gift'], "Giờ": time.strftime("%H:%M")})
+    st.session_state.lucky_list.insert(0, {"name": st.session_state.current_user, "gift": result['gift'], "time": time.strftime("%H:%M")})
     st.session_state.state = 'result'
     st.rerun()
 
@@ -136,15 +138,12 @@ elif st.session_state.state == 'result':
     st.markdown(f'<div class="title-tet">CHÚC MỪNG {st.session_state.current_user.upper()}</div>', unsafe_allow_html=True)
     res = st.session_state.result
     
-    # KHUNG KẾT QUẢ HÌNH CHỮ NHẬT NGANG
     st.markdown(f"""
         <div class="result-card">
             <div class="card-left">{res['gift']}</div>
             <div class="card-right">
                 <div class="wish-top">{res['wish']}</div>
-                <div class="image-bottom">
-                    <img src="{res['img']}">
-                </div>
+                <div class="image-bottom"><img src="{res['img']}"></div>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -154,8 +153,32 @@ elif st.session_state.state == 'result':
         st.rerun()
 
 elif st.session_state.state == 'view_list':
-    st.markdown('<div class="title-tet">BẢNG VÀNG MAY MẮN</div>', unsafe_allow_html=True)
-    st.dataframe(st.session_state.lucky_list, use_container_width=True)
+    st.markdown('<div class="title-tet">📝 BẢNG VÀNG MAY MẮN</div>', unsafe_allow_html=True)
+    
+    if st.session_state.lucky_list:
+        # GIAO DIỆN BẢNG TỰ CHẾ
+        list_html = '<div class="list-container">'
+        for item in st.session_state.lucky_list:
+            list_html += f"""
+                <div class="list-item">
+                    <span>👤 {item['name']}</span>
+                    <span class="gift-tag">{item['gift']}</span>
+                    <span style="font-size: 0.8rem; color: #666;">🕒 {item['time']}</span>
+                </div>
+            """
+        list_html += '</div>'
+        st.markdown(list_html, unsafe_allow_html=True)
+        
+        st.write("")
+        # NÚT RESET DANH SÁCH
+        if st.button("🗑️ XÓA TẤT CẢ DANH SÁCH", use_container_width=True, type="secondary"):
+            st.session_state.lucky_list = []
+            st.success("Đã dọn dẹp danh sách!")
+            time.sleep(1)
+            st.rerun()
+    else:
+        st.markdown('<p style="text-align:center;">Chưa có ai may mắn cả. Hãy gieo quẻ ngay!</p>', unsafe_allow_html=True)
+    
     if st.button("⬅️ QUAY LẠI", use_container_width=True):
         st.session_state.state = 'input_name'
         st.rerun()
