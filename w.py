@@ -5,7 +5,7 @@ import time
 # --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout="centered")
 
-# --- CSS & JS: HIỆU ỨNG HOA ĐÀO RƠI + ÂM THANH + LAYOUT ---
+# --- CSS & JS NÂNG CAO ---
 st.markdown("""
     <style>
     /* Nền đỏ Tết */
@@ -14,111 +14,111 @@ st.markdown("""
         overflow: hidden;
     }
 
-    /* Hiệu ứng rung lắc ống quẻ */
+    /* Hiệu ứng xóc ống quẻ */
     @keyframes shake-shaker {
-        0% { transform: rotate(0deg); }
-        25% { transform: rotate(15deg) translateY(-10px); }
-        50% { transform: rotate(-15deg) translateY(5px); }
-        75% { transform: rotate(10deg) translateY(-5px); }
-        100% { transform: rotate(0deg); }
+        0% { transform: translate(0,0) rotate(0deg); }
+        20% { transform: translate(-8px, 5px) rotate(-10deg); }
+        40% { transform: translate(8px, -5px) rotate(10deg); }
+        60% { transform: translate(-8px, -5px) rotate(-10deg); }
+        80% { transform: translate(8px, 5px) rotate(10deg); }
+        100% { transform: translate(0,0) rotate(0deg); }
     }
-    .shaker-box { font-size: 100px; text-align: center; margin: 20px auto; }
-    .shaking-active { animation: shake-shaker 0.15s infinite; }
+    .shaker-box { font-size: 120px; text-align: center; margin: 30px auto; }
+    .shaking-active { animation: shake-shaker 0.1s infinite; }
 
-    /* Hiệu ứng hoa rơi (Falling Flowers) */
-    .falling {
-        position: fixed; top: -10%; z-index: 9999;
-        user-select: none; cursor: default;
-        animation: fall linear infinite;
-    }
-    @keyframes fall {
-        to { transform: translateY(110vh) rotate(360deg); }
+    /* Hiệu ứng HOA ĐÀO & LÌ XÌ RƠI */
+    .falling-item {
+        position: fixed;
+        top: -50px;
+        z-index: 9999;
+        pointer-events: none;
+        animation: fall-and-spin linear infinite;
     }
 
-    /* LAYOUT KẾT QUẢ THEO PHÁC THẢO */
+    @keyframes fall-and-spin {
+        0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 1; }
+        25% { transform: translateY(25vh) rotate(90deg) translateX(15px); }
+        50% { transform: translateY(50vh) rotate(180deg) translateX(-15px); }
+        75% { transform: translateY(75vh) rotate(270deg) translateX(15px); }
+        100% { transform: translateY(105vh) rotate(360deg) translateX(0); opacity: 0.3; }
+    }
+
+    /* LAYOUT KẾT QUẢ */
     .result-container {
-        display: flex; background: white; border: 8px double #ffd700;
+        display: flex; background: white; border: 6px solid #ffd700;
         border-radius: 15px; width: 100%; max-width: 450px;
-        margin: 20px auto; box-shadow: 0 15px 40px rgba(0,0,0,0.5); overflow: hidden;
+        margin: 20px auto; box-shadow: 0 15px 40px rgba(0,0,0,0.6); overflow: hidden;
     }
     .card-left {
         flex: 1; background: #d32f2f; color: #ffeb3b;
         writing-mode: vertical-rl; text-orientation: upright;
         display: flex; align-items: center; justify-content: center;
-        font-size: 2rem; font-weight: bold; padding: 15px; border-right: 4px solid #ffd700;
+        font-size: 1.8rem; font-weight: bold; padding: 20px; border-right: 4px solid #ffd700;
     }
     .card-right { flex: 2.5; display: flex; flex-direction: column; background-color: #fffaf0; }
     .wish-top {
         flex: 1; display: flex; align-items: center; justify-content: center;
-        padding: 15px; font-size: 1.5rem; font-weight: 800; color: #b71c1c;
+        padding: 20px; font-size: 1.6rem; font-weight: 800; color: #b71c1c;
         border-bottom: 2px dashed #d32f2f; text-align: center;
     }
     .image-bottom { flex: 1.5; padding: 10px; display: flex; justify-content: center; align-items: center; }
-    .image-bottom img { max-height: 120px; border-radius: 10px; }
+    .image-bottom img { max-height: 140px; border-radius: 10px; }
 
-    .title-tet { color: #ffeb3b; text-align: center; font-size: 2.5rem; font-weight: bold; text-shadow: 2px 2px #333; }
+    .title-tet { color: #ffeb3b; text-align: center; font-size: 2.8rem; font-weight: bold; text-shadow: 2px 2px #000; }
     </style>
 
     <script>
-    // Hàm tạo hoa đào rơi
-    function createFlower() {
-        const icons = ['🌸', '🧧', '🌼'];
-        const flower = document.createElement('div');
-        flower.className = 'falling';
-        flower.innerText = icons[Math.floor(Math.random() * icons.length)];
-        flower.style.left = Math.random() * 100 + 'vw';
-        flower.style.fontSize = Math.random() * 20 + 10 + 'px';
-        flower.style.animationDuration = Math.random() * 3 + 2 + 's';
-        flower.style.opacity = Math.random();
-        document.body.appendChild(flower);
-        setTimeout(() => { flower.remove(); }, 5000);
+    function spawnItems() {
+        const items = ['🌸', '🌸', '🧧', '🌸', '🧧']; // Tỷ lệ hoa đào nhiều hơn lì xì
+        const item = document.createElement('div');
+        item.className = 'falling-item';
+        item.innerText = items[Math.floor(Math.random() * items.length)];
+        item.style.left = Math.random() * 100 + 'vw';
+        item.style.fontSize = Math.random() * 25 + 15 + 'px';
+        item.style.animationDuration = Math.random() * 4 + 3 + 's';
+        document.body.appendChild(item);
+        setTimeout(() => { item.remove(); }, 7000);
     }
-    setInterval(createFlower, 300);
+    setInterval(spawnItems, 200); // Tạo item mỗi 0.2 giây
     </script>
     """, unsafe_allow_html=True)
 
-# --- HÀM CHÈN ÂM THANH ---
-def play_sound(sound_url):
-    sound_html = f"""
-        <audio autoplay>
-            <source src="{sound_url}" type="audio/mp3">
-        </audio>
-    """
-    st.markdown(sound_html, unsafe_allow_html=True)
+# --- HÀM ÂM THANH ---
+def play_sound(url):
+    st.markdown(f'<audio autoplay><source src="{url}" type="audio/mp3"></audio>', unsafe_allow_html=True)
 
-# --- QUẢN LÝ TRẠNG THÁI ---
-if 'status' not in st.session_state:
-    st.session_state.status = 'idle'
+# --- LOGIC ---
+if 'page' not in st.session_state:
+    st.session_state.page = 'home'
 
 data = [
     {"money": "LÌ XÌ 50K", "wish": "VẠN SỰ NHƯ Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
     {"money": "LÌ XÌ 100K", "wish": "TIỀN VÀO NHƯ NƯỚC", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-    {"money": "LÌ XÌ 200K", "wish": "SỨC KHỎE DỒI DÀO", "img": "https://cdn-icons-png.flaticon.com/512/4359/4359942.png"},
+    {"money": "LÌ XÌ 200K", "wish": "TÌNH DUYÊN PHƠI PHỚI", "img": "https://cdn-icons-png.flaticon.com/512/4359/4359942.png"},
     {"money": "LÌ XÌ 500K", "wish": "ĐẠI PHÚ ĐẠI QUÝ", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614831.png"},
 ]
 
-# --- GIAO DIỆN CHÍNH ---
-if st.session_state.status == 'idle':
+if st.session_state.page == 'home':
     st.markdown('<div class="title-tet">🧧 GIEO QUẺ KHAI XUÂN 🧧</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker-box">🏺</div>', unsafe_allow_html=True)
-    if st.button("🏮 NHẤN ĐỂ XÓC QUẺ 🏮", use_container_width=True):
-        st.session_state.status = 'shaking'
+    if st.button("🏮 BẮT ĐẦU XÓC QUẺ 🏮", use_container_width=True):
+        st.session_state.page = 'shaking'
         st.rerun()
 
-elif st.session_state.status == 'shaking':
+elif st.session_state.page == 'shaking':
     st.markdown('<div class="title-tet">ĐANG XÓC QUẺ...</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker-box shaking-active">🏺</div>', unsafe_allow_html=True)
     
-    # Phát âm thanh xóc quẻ (Sử dụng link âm thanh online)
+    # Âm thanh xóc quẻ (Tiếng gỗ lách cách)
     play_sound("https://www.soundjay.com/misc/sounds/shaking-dice-1.mp3")
     
-    time.sleep(2.5)
+    time.sleep(3) # Xóc trong 3 giây cho hồi hộp
     st.session_state.result = random.choice(data)
-    st.session_state.status = 'result'
+    st.session_state.page = 'result'
     st.rerun()
 
-elif st.session_state.status == 'result':
-    st.markdown('<div class="title-tet">KẾT QUẢ CỦA BẠN</div>', unsafe_allow_html=True)
+elif st.session_state.page == 'result':
+    st.markdown('<div class="title-tet">QUẺ CỦA BẠN</div>', unsafe_allow_html=True)
     res = st.session_state.result
     
     st.markdown(f"""
@@ -131,7 +131,8 @@ elif st.session_state.status == 'result':
         </div>
     """, unsafe_allow_html=True)
     
+    # Nút gieo lại
     if st.button("🧧 XIN QUẺ LẠI"):
-        st.session_state.status = 'idle'
+        st.session_state.page = 'home'
         st.rerun()
     st.balloons()
