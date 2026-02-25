@@ -167,7 +167,7 @@ elif st.session_state.state == 'shaking':
     
     data = [
         {"gift": "1K", "wish": "Vạn Sự Như Ý", "img": "https://banner2.cleanpng.com/lnd/20250121/re/644d576f49df54bc2e004232f05991.webp"},
-        {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "https://cdn-icons-png.flaticon.com/512/3225/3225096.png"},
+        {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "blob:https://www.facebook.com/50a72fb3-796c-4ccc-ad4b-fb378e333834"},
         {"gift": "2K", "wish": "Cát Tường Như Ý", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "10K", "wish": "Tiền Vào Như Nước", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "20K", "wish": "Làm Ăn Phát Đạt", "img": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Numismatics_and_Notaphily_icon.png"},
@@ -176,7 +176,7 @@ elif st.session_state.state == 'shaking':
         {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "Kẹo Socola", "wish": "Tình Duyên Viên Mãn", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMbL1kxhbd_HfaoN80mpXE416tFjo_NfqRFomsu6J37Q&s"},
         {"gift": "1K", "wish": "Hạnh Phúc An Khang", "img": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Numismatics_and_Notaphily_icon.png"},
-        {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "https://cdn-icons-png.flaticon.com/512/3225/3225096.png"},
+        {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "blob:https://www.facebook.com/50a72fb3-796c-4ccc-ad4b-fb378e333834"},
         {"gift": "2K", "wish": "Mã Đáo Thành Công", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "10K", "wish": "Phát tài phát lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "20K", "wish": "Phú Quý Cát Tường", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
