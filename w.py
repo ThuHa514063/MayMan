@@ -45,7 +45,6 @@ st.markdown("""
         box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); position: relative;
     }
 
-    /* Bảng Vàng Display Fix */
     .list-scroll {
         background: rgba(255, 255, 255, 0.95); border-radius: 15px;
         padding: 10px; max-height: 400px; overflow-y: auto; border: 4px solid #ffd700;
@@ -56,7 +55,7 @@ st.markdown("""
     }
     .gift-label { background: #d32f2f; color: #ffeb3b; padding: 4px 12px; border-radius: 8px; font-size: 0.9rem; }
 
-    /* Result Card - GIỮ NGUYÊN CẤU TRÚC & ẢNH */
+    /* Result Card - GIỮ NGUYÊN DANH SÁCH GIFT */
     .result-card {
         display: flex; background: white; border: 6px solid #ffd700;
         border-radius: 20px; width: 100%; height: 320px;
@@ -123,7 +122,7 @@ with st.sidebar:
 # --- LOGIC CHÍNH ---
 st.markdown('<div class="main-box">', unsafe_allow_html=True)
 
-# Nút Home nhanh ở góc trên mỗi trang
+# Nút Home nhanh
 if st.session_state.state != 'home':
     col_h1, col_h2 = st.columns([0.9, 0.1])
     with col_h2:
@@ -137,8 +136,8 @@ if st.session_state.state == 'home':
     st.markdown("""
         <div class="home-container">
             <h2 style="color:#ffd700; font-family:'Sriracha';">🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
-            <p style="color:white;">Năm mới Bính Ngọ, mã đáo thành công!</p>
-            <p style="color:white;">Mời bồ gieo quẻ đầu năm nhận lộc may mắn.</p>
+            <p style="color:white;">Năm mới Bính Ngọ sang, mã đáo thành công!</p>
+            <p style="color:white;">Mời bồ gieo quẻ nhận lộc đầu năm.</p>
         </div>
     """, unsafe_allow_html=True)
     st.write("")
@@ -158,13 +157,12 @@ elif st.session_state.state == 'input_name':
         else:
             st.error("Chưa nhập tên bồ ơi!")
 
-# 3. TRANG ĐANG LẮC (DANH SÁCH GIFT GIỮ NGUYÊN)
+# 3. TRANG ĐANG LẮC (GIỮ NGUYÊN DANH SÁCH GIFT)
 elif st.session_state.state == 'shaking':
     st.markdown(f'<div class="title-tet">Đang lắc cho {st.session_state.current_user}</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker">🏺</div>', unsafe_allow_html=True)
     time.sleep(2)
     
-    # DANH SÁCH GIFT GIỮ NGUYÊN NHƯ YÊU CẦU
     data = [
         {"gift": "1K", "wish": "Vạn Sự Như Ý", "img": "https://banner2.cleanpng.com/lnd/20250121/re/644d576f49df54bc2e004232f05991.webp"},
         {"gift": "Bim bim", "wish": "Gắn Kết Yêu Thương", "img": "https://as1.ftcdn.net/jpg/01/14/11/96/1000_F_114119627_5o7TexwSbzds5UgqS9VqZiJmNx0KWgVR.webp"},
@@ -199,7 +197,7 @@ elif st.session_state.state == 'result':
         st.session_state.state = 'input_name'
         st.rerun()
 
-# 5. TRANG BẢNG VÀNG
+# 5. TRANG BẢNG VÀNG (ĐÃ THÊM NÚT XÓA)
 elif st.session_state.state == 'view_list':
     st.markdown('<div class="title-tet">Bảng Vàng May Mắn</div>', unsafe_allow_html=True)
     if st.session_state.lucky_list:
@@ -213,8 +211,14 @@ elif st.session_state.state == 'view_list':
             </div>"""
         list_html += '</div>'
         st.markdown(list_html, unsafe_allow_html=True)
+        
+        st.write("")
+        # --- CHỨC NĂNG XÓA BẢNG VÀNG ---
+        if st.button("🗑️ LÀM MỚI BẢNG VÀNG", use_container_width=True):
+            st.session_state.lucky_list = []
+            st.rerun()
     else:
-        st.markdown('<p style="text-align:center; color:white;">Chưa có ai nhận lộc!</p>', unsafe_allow_html=True)
+        st.markdown('<p style="text-align:center; color:white;">Bảng vàng đang trống bồ ơi!</p>', unsafe_allow_html=True)
 
 # 6. TRANG VIẾT LỜI CHÚC
 elif st.session_state.state == 'write_wish':
@@ -230,13 +234,13 @@ elif st.session_state.state == 'write_wish':
             st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 7. TRANG XEM TẤT CẢ LỜI CHÚC
+# 7. TRANG XEM LỜI CHÚC
 elif st.session_state.state == 'view_wishes':
     st.markdown('<div class="title-tet">Bức Tường Lời Chúc</div>', unsafe_allow_html=True)
     if st.session_state.wishes_list:
         for w in st.session_state.wishes_list:
             st.markdown(f'<div class="wish-wall-item"><b>👤 {w["name"]}</b><br>{w["wish"]}</div>', unsafe_allow_html=True)
     else:
-        st.write("Chưa có lời chúc nào.")
+        st.write("Chưa có ai gửi lời chúc.")
 
 st.markdown('</div>', unsafe_allow_html=True)
