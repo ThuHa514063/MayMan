@@ -9,7 +9,7 @@ st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout
 if 'lucky_list' not in st.session_state:
     st.session_state.lucky_list = []
 if 'state' not in st.session_state:
-    st.session_state.state = 'input_name'
+    st.session_state.state = 'home'  # Bắt đầu tại trang Home
 if 'current_user' not in st.session_state:
     st.session_state.current_user = ""
 
@@ -33,6 +33,16 @@ st.markdown("""
         font-family: 'Dancing Script', cursive;
         color: #ffeb3b; text-align: center; font-size: 3.5rem; font-weight: bold;
         text-shadow: 3px 3px 15px #000; margin-bottom: 20px;
+    }
+    
+    .home-box {
+        text-align: center;
+        background: rgba(211, 47, 47, 0.85);
+        padding: 40px;
+        border-radius: 20px;
+        border: 5px solid #ffd700;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        color: white;
     }
 
     .result-card {
@@ -98,7 +108,24 @@ st.markdown("""
 # --- LOGIC ---
 st.markdown('<div class="main-box">', unsafe_allow_html=True)
 
-if st.session_state.state == 'input_name':
+# 1. TRANG CHỦ (HOME)
+if st.session_state.state == 'home':
+    st.markdown('<div class="title-tet">Chúc Mừng Năm Mới 2026</div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div class="home-box">
+            <h2>🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
+            <p>Chào mừng bạn đến với hội gieo quẻ may mắn.</p>
+            <p>Hãy để thần linh mách bảo xem năm mới bạn nhận được lộc gì nhé!</p>
+            <br>
+        </div>
+    """, unsafe_allow_html=True)
+    st.write("")
+    if st.button("🧧 BẮT ĐẦU GIEO QUẺ 🧧", use_container_width=True):
+        st.session_state.state = 'input_name'
+        st.rerun()
+
+# 2. TRANG NHẬP TÊN
+elif st.session_state.state == 'input_name':
     st.markdown('<div class="title-tet">Gieo Quẻ Khai Xuân</div>', unsafe_allow_html=True)
     name = st.text_input("Nhập tên để nhận lộc:", placeholder="Tên của bạn...", key="name_input")
     
@@ -116,12 +143,12 @@ if st.session_state.state == 'input_name':
             st.session_state.state = 'view_list'
             st.rerun()
 
+# 3. TRANG ĐANG LẮC
 elif st.session_state.state == 'shaking':
     st.markdown(f'<div class="title-tet">Đang lắc cho {st.session_state.current_user}</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker">🏺</div>', unsafe_allow_html=True)
     time.sleep(2)
     
-    # ĐÃ FIX CÚ PHÁP TRONG DATA
     data = [
         {"gift": "1K", "wish": "Vạn Sự Như Ý", "img": "https://banner2.cleanpng.com/lnd/20250121/re/644d576f49df54bc2e004232f05991.webp"},
         {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "https://cdn-icons-png.flaticon.com/512/3225/3225096.png"},
@@ -148,6 +175,7 @@ elif st.session_state.state == 'shaking':
     st.session_state.state = 'result'
     st.rerun()
 
+# 4. TRANG KẾT QUẢ
 elif st.session_state.state == 'result':
     st.markdown(f'<div class="title-tet">Chúc mừng {st.session_state.current_user}</div>', unsafe_allow_html=True)
     res = st.session_state.result
@@ -171,6 +199,7 @@ elif st.session_state.state == 'result':
             st.session_state.state = 'view_list'
             st.rerun()
 
+# 5. TRANG BẢNG VÀNG
 elif st.session_state.state == 'view_list':
     st.markdown('<div class="title-tet">Bảng Vàng May Mắn</div>', unsafe_allow_html=True)
     if st.session_state.lucky_list:
