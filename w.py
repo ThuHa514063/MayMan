@@ -5,9 +5,10 @@ import time
 # --- CẤU HÌNH TRANG ---
 st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout="centered")
 
-# --- CSS & JS: PHÁO HOA + HOA ĐÀO/LÌ XÌ RƠI ---
+# --- TOÀN BỘ CSS & JS (HOA ĐÀO RƠI + PHÁO HOA + LAYOUT) ---
 st.markdown("""
     <style>
+    /* Nền đỏ Tết */
     .stApp {
         background: radial-gradient(circle, #b71c1c 0%, #7f0000 100%);
         overflow: hidden;
@@ -22,20 +23,24 @@ st.markdown("""
         80% { transform: translate(8px, 5px) rotate(10deg); }
         100% { transform: translate(0,0) rotate(0deg); }
     }
-    .shaker-box { font-size: 120px; text-align: center; margin: 30px auto; }
+    .shaker-box { font-size: 100px; text-align: center; margin: 30px auto; pointer-events: none; }
     .shaking-active { animation: shake-shaker 0.1s infinite; }
 
-    /* Hiệu ứng HOA ĐÀO & LÌ XÌ RƠI */
+    /* Hiệu ứng HOA ĐÀO & LÌ XÌ RƠI (MƯA) */
     .falling-item {
-        position: fixed; top: -50px; z-index: 9999; pointer-events: none;
-        animation: fall-and-spin linear infinite;
+        position: fixed;
+        top: -50px;
+        z-index: 9999;
+        pointer-events: none;
+        animation: fall-animation linear infinite;
+        user-select: none;
     }
-    @keyframes fall-and-spin {
+    @keyframes fall-animation {
         0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 1; }
-        100% { transform: translateY(105vh) rotate(360deg) translateX(20px); opacity: 0.3; }
+        100% { transform: translateY(110vh) rotate(360deg) translateX(30px); opacity: 0; }
     }
 
-    /* LAYOUT KẾT QUẢ THEO PHÁC THẢO */
+    /* LAYOUT KẾT QUẢ */
     .result-container {
         display: flex; background: white; border: 6px solid #ffd700;
         border-radius: 15px; width: 100%; max-width: 450px;
@@ -56,67 +61,59 @@ st.markdown("""
     .image-bottom { flex: 1.5; padding: 10px; display: flex; justify-content: center; align-items: center; }
     .image-bottom img { max-height: 140px; border-radius: 10px; }
 
-    .title-tet { color: #ffeb3b; text-align: center; font-size: 2.8rem; font-weight: bold; text-shadow: 2px 2px #000; }
+    .title-tet { color: #ffeb3b; text-align: center; font-size: 2.5rem; font-weight: bold; text-shadow: 2px 2px #000; margin-bottom: 10px;}
     </style>
 
     <script>
-    // Tạo hoa đào và lì xì rơi
-    function spawnItems() {
-        const items = ['🌸', '🧧', '🌸'];
+    // Hàm tạo mưa hoa đào và lì xì
+    function createRain() {
+        const items = ['🌸', '🧧', '🌸', '🌼', '🧧'];
+        const container = window.parent.document.body; // Gắn vào body của Streamlit
         const item = document.createElement('div');
         item.className = 'falling-item';
         item.innerText = items[Math.floor(Math.random() * items.length)];
         item.style.left = Math.random() * 100 + 'vw';
-        item.style.fontSize = Math.random() * 25 + 15 + 'px';
-        item.style.animationDuration = Math.random() * 4 + 3 + 's';
-        document.body.appendChild(item);
-        setTimeout(() => { item.remove(); }, 7000);
+        item.style.fontSize = Math.random() * 20 + 15 + 'px';
+        item.style.animationDuration = Math.random() * 3 + 4 + 's';
+        container.appendChild(item);
+        setTimeout(() => { item.remove(); }, 6000);
     }
-    setInterval(spawnItems, 300);
+    setInterval(createRain, 250);
     </script>
     """, unsafe_allow_html=True)
 
-# --- HÀM PHÁO HOA (Thay thế cho bóng bay) ---
+# --- HÀM PHÁO HOA ---
 def firecrackers_effect():
     st.components.v1.html("""
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
         <script>
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
-            }
-
-            var interval = setInterval(function() {
-              var timeLeft = animationEnd - Date.now();
-              if (timeLeft <= 0) { return clearInterval(interval); }
-              var particleCount = 50 * (timeLeft / duration);
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
+            var end = Date.now() + (3 * 1000);
+            (function frame() {
+              confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#ffd700'] });
+              confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#ffd700'] });
+              if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
         </script>
     """, height=0)
 
 def play_sound(url):
     st.markdown(f'<audio autoplay><source src="{url}" type="audio/mp3"></audio>', unsafe_allow_html=True)
 
-# --- LOGIC CHƯƠNG TRÌNH ---
+# --- LOGIC APP ---
 if 'page' not in st.session_state:
     st.session_state.page = 'home'
 
 data = [
     {"money": "LÌ XÌ 50K", "wish": "VẠN SỰ NHƯ Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
     {"money": "LÌ XÌ 100K", "wish": "TIỀN VÀO NHƯ NƯỚC", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-    {"money": "LÌ XÌ 200K", "wish": "TÌNH DUYÊN PHƠI PHỚI", "img": "https://cdn-icons-png.flaticon.com/512/4359/4359942.png"},
+    {"money": "LÌ XÌ 200K", "wish": "SỨC KHỎE DỒI DÀO", "img": "https://cdn-icons-png.flaticon.com/512/4359/4359942.png"},
     {"money": "LÌ XÌ 500K", "wish": "ĐẠI PHÚ ĐẠI QUÝ", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614831.png"},
 ]
 
 if st.session_state.page == 'home':
     st.markdown('<div class="title-tet">🧧 GIEO QUẺ KHAI XUÂN 🧧</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker-box">🏺</div>', unsafe_allow_html=True)
-    if st.button("🏮 BẮT ĐẦU XÓC QUẺ 🏮", use_container_width=True):
+    if st.button("🏮 CHẠM ĐỂ XÓC QUẺ 🏮", use_container_width=True):
         st.session_state.page = 'shaking'
         st.rerun()
 
@@ -124,14 +121,14 @@ elif st.session_state.page == 'shaking':
     st.markdown('<div class="title-tet">ĐANG XÓC QUẺ...</div>', unsafe_allow_html=True)
     st.markdown('<div class="shaker-box shaking-active">🏺</div>', unsafe_allow_html=True)
     play_sound("https://www.soundjay.com/misc/sounds/shaking-dice-1.mp3")
-    time.sleep(3)
+    time.sleep(2.5)
     st.session_state.result = random.choice(data)
     st.session_state.page = 'result'
     st.rerun()
 
 elif st.session_state.page == 'result':
-    st.markdown('<div class="title-tet">QUẺ CỦA BẠN</div>', unsafe_allow_html=True)
-    firecrackers_effect() # Gọi hiệu ứng pháo hoa thay cho bóng bay
+    st.markdown('<div class="title-tet">KẾT QUẢ CỦA BẠN</div>', unsafe_allow_html=True)
+    firecrackers_effect() # Pháo hoa đỏ vàng nổ
     
     res = st.session_state.result
     st.markdown(f"""
