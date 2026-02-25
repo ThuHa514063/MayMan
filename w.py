@@ -132,18 +132,18 @@ elif st.session_state.state == 'shaking':
         {"gift": "10K", "wish": "Tiền Vào Như Nước", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "20K", "wish": "Làm Ăn Phát Đạt", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "Bánh quy", "wish": "Ngọt Ngào Cả Năm", "img": "https://cdn-icons-png.flaticon.com/512/541/541732.png"},
-        {"gift": "Bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
+        {"gift": "Bánh bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
         {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "Socola", "wish": "Tình Duyên Viên Mãn", "img": "https://cdn-icons-png.flaticon.com/512/2576/2576762.png"},
+        {"gift": "Socola", "wish": "Tình Duyên Viên Mãn", "img": "https://media.istockphoto.com/id/1011038838/vi/vec-to/thanh-s%C3%B4-c%C3%B4-la-%C4%91%E1%BB%93-ng%E1%BB%8Dt-v%C3%A0-b%E1%BB%99-b%C3%A1nh-ng%E1%BB%8Dt-bi%E1%BB%83u-t%C6%B0%E1%BB%A3ng-ph%C3%A1c-th%E1%BA%A3o-%C4%91%E1%BA%A7y.jpg?s=612x612&w=0&k=20&c=yiRIOOXDu5UsRleM6OH5NED5vEWERBOW_UlbHs9qeg8="},
         {"gift": "1K", "wish": "Hạnh Phúc An Khang", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
         {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "https://cdn-icons-png.flaticon.com/512/3225/3225096.png"},
         {"gift": "2K", "wish": "Mã Đáo Thành Công", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
         {"gift": "10K", "wish": "Phát tài phát lộc – Công thành danh toại", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "20K", "wish": "Phú Quý Cát Tường", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "Bánh quy", "wish": "NLộc tràn xuân mới – Niềm vui phơi phới", "img": "https://cdn-icons-png.flaticon.com/512/541/541732.png"},
-        {"gift": "Bánh bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
+        {"gift": "Bánh bông lan", "wish": "Mềm Mại Hạnh Phúc", "https://cdn-media.sforum.vn/storage/app/media/wp-content/uploads/2023/10/cach-lam-banh-bong-lan-thumb.jpg"},
         {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "Socola", "wish": "Ngàn lần như ý – Vạn sự như mơ", "img": "https://cdn-icons-png.flaticon.com/512/2576/2576762.png"},
+        {"gift": "Socola", "wish": "Ngàn lần như ý – Vạn sự như mơ", "img": "https://file.hstatic.net/200000331851/file/socola-ferrero-rocher_503b44453ec84763a9e22a957e069293_grande.jpg"},
     ]
     result = random.choice(data)
     st.session_state.result = result
