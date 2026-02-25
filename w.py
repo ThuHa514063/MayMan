@@ -156,7 +156,7 @@ if st.session_state.state == 'home':
         <div class="home-container">
             <div class="home-box">
                 <h2>🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
-                <p>Đầu xuân Ất Tỵ, chúc bạn vạn sự hanh thông!</p>
+                <p>Đầu xuân Bính Ngọ, chúc bạn vạn sự hanh thông!</p>
                 <p>Cùng gieo quẻ đầu năm để nhận lộc may mắn nhé.</p>
                 <br>
             </div>
