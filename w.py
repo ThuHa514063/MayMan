@@ -120,13 +120,13 @@ st.markdown('<div class="main-box">', unsafe_allow_html=True)
 
 # 1. TRANG CHỦ (HOME) - ĐÃ TRANG TRÍ LẠI
 if st.session_state.state == 'home':
-    st.markdown('<div class="title-tet">Mừng Xuân 2026</div>', unsafe_allow_html=True)
+    st.markdown('<div class="title-tet">Chúc mừng năm mới 2026</div>', unsafe_allow_html=True)
     st.markdown("""
         <div class="home-container">
             <div class="home-box">
                 <h2>🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
-                <p>Năm mới Ất Tỵ sang, chúc bạn vạn sự hanh thông!</p>
-                <p>Cùng gieo quẻ đầu năm để nhận lộc may mắn từ hội bạn nhé.</p>
+                <p>Đầu xuân Bính Ngọ, chúc bạn vạn sự hanh thông!</p>
+                <p>Cùng gieo quẻ đầu năm để nhận lộc may mắn nhé.</p>
                 <br>
             </div>
         </div>
