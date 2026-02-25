@@ -3,7 +3,7 @@ import random
 import time
 
 # --- CẤU HÌNH TRANG ---
-st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout="centered")
+st.set_page_config(page_title="Gieo Quẻ Đầu Năm", page_icon="🧧", layout="wide")
 
 # --- KHỞI TẠO DỮ LIỆU ---
 if 'lucky_list' not in st.session_state:
@@ -25,7 +25,6 @@ st.markdown("""
         background: rgba(0, 0, 0, 0.4); z-index: 0;
     }
 
-    /* Hiệu ứng rơi */
     .petal, .lixi {
         position: fixed; top: -10%; user-select: none; pointer-events: none; z-index: 9999;
         animation: fall linear infinite; font-size: 25px;
@@ -33,55 +32,87 @@ st.markdown("""
     @keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
 
     .main-box {
-        background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
-        padding: 30px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.3);
-        z-index: 1; position: relative; max-width: 850px; margin: auto;
+        background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(8px);
+        padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);
+        z-index: 1; position: relative; max-width: 1000px; margin: auto;
     }
 
     .title-tet {
-        color: #ffffff; text-align: center; font-size: 2.8rem; font-weight: bold;
+        color: #ffffff; text-align: center; font-size: 3rem; font-weight: bold;
         text-shadow: 3px 3px 10px #000; margin-bottom: 20px;
     }
 
-    /* KHUNG KẾT QUẢ - HIỂN THỊ MÓN QUÀ */
+    /* KHUNG KẾT QUẢ - FORM HÌNH CHỮ NHẬT NẰM NGANG */
     .result-card {
-        display: flex; background: white; border: 8px solid #ffd700;
-        border-radius: 20px; width: 100%; min-height: 450px;
-        margin: 20px auto; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        display: flex; 
+        background: white; 
+        border: 8px solid #ffd700;
+        border-radius: 20px; 
+        width: 100%; 
+        max-width: 950px; /* Kéo dài chiều ngang */
+        height: 350px;    /* Giảm chiều dọc xuống */
+        margin: 20px auto; 
+        overflow: hidden; 
+        box-shadow: 0 25px 50px rgba(0,0,0,0.8);
     }
     
-    /* PHẦN ĐỎ: CHỈ HIỂN THỊ MÓN QUÀ QUAY ĐƯỢC */
+    /* PHẦN ĐỎ (BÊN TRÁI) - GỌN LẠI */
     .card-left {
-        flex: 1.2; background: #d32f2f; color: #ffeb3b; 
+        flex: 0.8; /* Thu hẹp tỉ lệ chiều ngang phần màu đỏ */
+        background: #d32f2f; color: #ffeb3b; 
         writing-mode: vertical-rl; text-orientation: upright;
         display: flex; align-items: center; justify-content: center;
-        font-size: 4.5rem; /* Cực to */
-        font-weight: 900; padding: 20px; border-right: 6px solid #ffd700;
-        text-shadow: 3px 3px 0px #000;
+        font-size: 3.5rem; 
+        font-weight: 900; padding: 10px; border-right: 6px solid #ffd700;
+        text-shadow: 2px 2px 0px #000;
+        letter-spacing: 5px;
     }
     
-    .card-right { flex: 3; display: flex; flex-direction: column; background-color: #fffaf0; }
-    
-    .wish-top {
-        flex: 1; padding: 25px; font-size: 2.2rem; font-weight: 900; color: #b71c1c;
-        border-bottom: 4px dashed #d32f2f; text-align: center;
-        display: flex; align-items: center; justify-content: center;
+    /* PHẦN NỘI DUNG (BÊN PHẢI) - RỘNG THÊNH THANG */
+    .card-right { 
+        flex: 3; 
+        display: flex; 
+        flex-direction: row; /* Chuyển nội dung bên phải thành hàng ngang luôn cho rộng */
+        background-color: #fffaf0; 
     }
-    .image-bottom { flex: 2; padding: 15px; display: flex; justify-content: center; align-items: center; }
-    .image-bottom img { max-height: 220px; width: auto; }
+    
+    .wish-box {
+        flex: 1.5;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #b71c1c;
+        border-right: 3px dashed #d32f2f; /* Đường gạch dọc chia lời chúc và ảnh */
+        text-align: center;
+        line-height: 1.3;
+    }
 
+    .image-box {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+    .image-box img {
+        max-height: 250px;
+        width: auto;
+    }
+
+    /* Shaker ống quẻ */
     .shaker { font-size: 130px; text-align: center; margin: 10px auto; filter: drop-shadow(0 0 15px gold); }
     .shake-anim { animation: shake 0.1s infinite; }
     @keyframes shake { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
-    
-    /* Chỉnh style input và button */
-    .stTextInput>div>div>input { font-size: 1.2rem; padding: 10px; }
-    div.stButton>button { font-size: 1.3rem !important; font-weight: bold !important; height: 55px !important; }
     </style>
 
-    <div class="petal" style="left:10%; animation-duration:8s;">🌸</div>
-    <div class="lixi" style="left:40%; animation-duration:11s;">🧧</div>
-    <div class="petal" style="left:70%; animation-duration:9s;">🌸</div>
+    <div class="petal" style="left:5%; animation-duration:7s;">🌸</div>
+    <div class="lixi" style="left:25%; animation-duration:10s;">🧧</div>
+    <div class="petal" style="left:50%; animation-duration:12s;">🌸</div>
+    <div class="lixi" style="left:75%; animation-duration:9s;">🧧</div>
+    <div class="petal" style="left:90%; animation-duration:11s;">🌸</div>
 """, unsafe_allow_html=True)
 
 # --- LOGIC ---
@@ -97,9 +128,9 @@ if st.session_state.state == 'input_name':
             st.session_state.state = 'shaking'
             st.rerun()
         else:
-            st.error("⚠️ Phải có cái tên mới gieo quẻ được chứ!")
+            st.error("⚠️ Nhập tên đã bồ tèo ơi!")
     
-    if st.button("📝 XEM DANH SÁCH MAY MẮN", use_container_width=True):
+    if st.button("📝 DANH SÁCH MAY MẮN", use_container_width=True):
         st.session_state.state = 'view_list'
         st.rerun()
 
@@ -109,7 +140,6 @@ elif st.session_state.state == 'shaking':
     st.markdown('<audio autoplay><source src="https://www.soundjay.com/misc/sounds/shaking-dice-1.mp3" type="audio/mp3"></audio>', unsafe_allow_html=True)
     
     time.sleep(2.5)
-    # Danh sách quà tặng
     data = [
         {"gift": "50K", "wish": "VẠN SỰ NHƯ Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
         {"gift": "100K", "wish": "TIỀN VÀO NHƯ NƯỚC", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
@@ -126,13 +156,13 @@ elif st.session_state.state == 'result':
     st.markdown(f'<div class="title-tet">CHÚC MỪNG {st.session_state.current_user.upper()}</div>', unsafe_allow_html=True)
     res = st.session_state.result
     
-    # KHUNG KẾT QUẢ HIỂN THỊ MÓN QUÀ TIÊU ĐIỂM
+    # KHUNG KẾT QUẢ HÌNH CHỮ NHẬT NẰM NGANG
     st.markdown(f"""
         <div class="result-card">
             <div class="card-left">{res['gift']}</div>
             <div class="card-right">
-                <div class="wish-top">{res['wish']}</div>
-                <div class="image-bottom">
+                <div class="wish-box">{res['wish']}</div>
+                <div class="image-box">
                     <img src="{res['img']}">
                 </div>
             </div>
@@ -145,7 +175,7 @@ elif st.session_state.state == 'result':
 
 elif st.session_state.state == 'view_list':
     st.markdown('<div class="title-tet">BẢNG VÀNG MAY MẮN</div>', unsafe_allow_html=True)
-    st.dataframe(st.session_state.lucky_list, use_container_width=True)
+    st.table(st.session_state.lucky_list)
     if st.button("⬅️ QUAY LẠI", use_container_width=True):
         st.session_state.state = 'input_name'
         st.rerun()
