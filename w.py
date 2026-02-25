@@ -9,7 +9,10 @@ st.set_page_config(page_title="Gieo Quẻ Bính Ngọ 2026", page_icon="🧧", l
 if 'lucky_list' not in st.session_state:
     st.session_state.lucky_list = []
 if 'wishes_list' not in st.session_state:
-    st.session_state.wishes_list = []
+    # Dữ liệu mẫu ban đầu cho sinh động
+    st.session_state.wishes_list = [
+        {"name": "Admin", "wish": "Chúc mọi người năm mới Bính Ngọ vạn sự hanh thông, mã đáo thành công!"}
+    ]
 if 'state' not in st.session_state:
     st.session_state.state = 'home'
 if 'current_user' not in st.session_state:
@@ -42,11 +45,6 @@ st.markdown("""
         padding: 30px; border-radius: 25px; text-align: center;
         box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); position: relative; overflow: hidden;
     }
-    .home-container::before { content: "🧧"; position: absolute; top: 10px; left: 10px; font-size: 30px; opacity: 0.5; }
-    .home-container::after { content: "🧧"; position: absolute; bottom: 10px; right: 10px; font-size: 30px; opacity: 0.5; }
-
-    .home-box h2 { font-family: 'Sriracha', cursive; color: #ffd700; font-size: 2rem; margin-bottom: 15px; }
-    .home-box p { color: #fff !important; font-size: 1.2rem !important; line-height: 1.5; text-shadow: none !important; margin-bottom: 10px; }
 
     /* Result Card giữ nguyên link ảnh và cấu trúc */
     .result-card {
@@ -70,22 +68,15 @@ st.markdown("""
     .image-bottom { flex: 1.5; padding: 10px; display: flex; justify-content: center; align-items: center; }
     .image-bottom img { max-height: 150px; width: auto; }
 
-    .list-scroll {
-        background: rgba(255, 255, 255, 0.9); border-radius: 15px;
-        padding: 10px; max-height: 300px; overflow-y: auto; border: 4px solid #ffd700;
+    /* Sticky note rực rỡ cho lời chúc */
+    .wish-wall-item {
+        background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%);
+        color: #b71c1c; padding: 20px; border-radius: 15px;
+        border-left: 8px solid #d32f2f; margin-bottom: 15px; 
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+        position: relative;
     }
-    .list-row {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 8px 15px; border-bottom: 1px solid #eee; color: #b71c1c; font-weight: bold;
-    }
-    .gift-label { background: #d32f2f; color: #ffeb3b; padding: 2px 10px; border-radius: 5px; font-size: 0.9rem; }
-
-    /* Sticky note cho lời chúc */
-    .wish-note {
-        background: #fff9c4; color: #b71c1c; padding: 15px; border-radius: 10px;
-        border-left: 5px solid #ffd700; margin-bottom: 12px; 
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-    }
+    .wish-wall-item b { color: #d32f2f; font-size: 1.2rem; display: block; margin-bottom: 5px; border-bottom: 1px solid rgba(211, 47, 47, 0.2); }
 
     .stMarkdown p, label { color: white !important; font-size: 1.1rem !important; text-shadow: 1px 1px 3px black; }
     
@@ -106,29 +97,30 @@ st.markdown("""
     <div class="petal" style="left:45%; animation-duration:10s;">🌸</div>
     <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
     <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
-    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
-    <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
-    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
 """, unsafe_allow_html=True)
 
 # --- MENU NỔI (SIDEBAR) ---
 with st.sidebar:
-    st.markdown("### 🏮 MENU BÍNH NGỌ")
+    st.markdown("### 🏮 MENU TẾT 2026")
     st.write("")
     if st.button("🏠 Trang Chủ", use_container_width=True):
         st.session_state.state = 'home'
         st.rerun()
-    if st.button("🧧 Gieo Quẻ Ngay", use_container_width=True):
+    if st.button("🧧 Gieo Quẻ Nhận Lộc", use_container_width=True):
         st.session_state.state = 'input_name'
         st.rerun()
-    if st.button("📝 Bảng Vàng", use_container_width=True):
+    if st.button("📝 Bảng Vàng May Mắn", use_container_width=True):
         st.session_state.state = 'view_list'
         st.rerun()
-    if st.button("💌 Gửi Lại Lời Chúc", use_container_width=True):
-        st.session_state.state = 'send_wishes'
+    st.markdown("---")
+    if st.button("✍️ Viết Lời Chúc Mới", use_container_width=True):
+        st.session_state.state = 'write_wish'
+        st.rerun()
+    if st.button("📜 Bức Tường Lời Chúc", use_container_width=True):
+        st.session_state.state = 'view_wishes'
         st.rerun()
     st.write("---")
-    st.caption("Chúc mừng năm mới Bính Ngọ 2026! 🐎")
+    st.caption("Năm Bính Ngọ cát tường! 🐎")
 
 # --- LOGIC CHÍNH ---
 st.markdown('<div class="main-box">', unsafe_allow_html=True)
@@ -138,37 +130,23 @@ if st.session_state.state == 'home':
     st.markdown('<div class="title-tet">Mừng Xuân Bính Ngọ 2026</div>', unsafe_allow_html=True)
     st.markdown("""
         <div class="home-container">
-            <div class="home-box">
-                <h2>🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
-                <p>Năm mới Bính Ngọ sang, chúc bạn vạn sự hanh thông!</p>
-                <p>Cùng gieo quẻ đầu năm để nhận lộc may mắn nhé.</p>
-                <br>
-            </div>
+            <h2 style="color:#ffd700; font-family:'Sriracha';">🧧 KHAI XUÂN NHƯ Ý 🧧</h2>
+            <p style="color:white;">Chào mừng bạn đến với hội xuân Bính Ngọ.</p>
+            <p style="color:white;">Hãy chọn chức năng ở Menu bên trái để bắt đầu!</p>
         </div>
     """, unsafe_allow_html=True)
-    st.write("")
-    if st.button("🏮 BẮT ĐẦU GIEO QUẺ 🏮", use_container_width=True):
-        st.session_state.state = 'input_name'
-        st.rerun()
 
 # 2. TRANG NHẬP TÊN
 elif st.session_state.state == 'input_name':
     st.markdown('<div class="title-tet">Gieo Quẻ Khai Xuân</div>', unsafe_allow_html=True)
     name = st.text_input("Nhập tên để nhận lộc:", placeholder="Tên của bạn...", key="name_input")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🏮 VÀO LẮC QUẺ", use_container_width=True):
-            if name:
-                st.session_state.current_user = name
-                st.session_state.state = 'shaking'
-                st.rerun()
-            else:
-                st.error("Nhập tên đã bồ ơi!")
-    with col2:
-        if st.button("📝 BẢNG VÀNG", use_container_width=True):
-            st.session_state.state = 'view_list'
+    if st.button("🏺 VÀO LẮC QUẺ", use_container_width=True):
+        if name:
+            st.session_state.current_user = name
+            st.session_state.state = 'shaking'
             st.rerun()
+        else:
+            st.error("Nhập tên đã bồ ơi!")
 
 # 3. TRANG ĐANG LẮC (GIỮ NGUYÊN DANH SÁCH QUÀ & LINK)
 elif st.session_state.state == 'shaking':
@@ -186,15 +164,6 @@ elif st.session_state.state == 'shaking':
         {"gift": "Bánh bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://media.istockphoto.com/id/1352416535/vi/vec-to/b%C3%A1nh-sandwich-ng%E1%BB%8Dt-v%E1%BB%9Bi-c%C3%A1c-l%E1%BB%9Bp-b%E1%BB%8Dt-bi%E1%BB%83n-nh%C3%A2n-kem-%C4%91%C3%A1nh-vani-v%C3%A0-d%C3%A2u-t%C3%A2y-victoria-tr%C3%A1ng-mi%E1%BB%87ng.jpg?s=612x612&w=0&k=20&c=wcpZGWNUGl20QJrXQ6o1l2DD6vmClwLPsTlFwblgx6w="},
         {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "Kẹo Socola", "wish": "Tình Duyên Viên Mãn", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMbL1kxhbd_HfaoN80mpXE416tFjo_NfqRFomsu6J37Q&s"},
-        {"gift": "1K", "wish": "Hạnh Phúc An Khang", "img": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Numismatics_and_Notaphily_icon.png"},
-        {"gift": "Bim Bim", "wish": "Gắn Kết Yêu Thương", "img": "https://as1.ftcdn.net/jpg/01/14/11/96/1000_F_114119627_5o7TexwSbzds5UgqS9VqZiJmNx0KWgVR.webp"},
-        {"gift": "2K", "wish": "Mã Đáo Thành Công", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "10K", "wish": "Phát tài phát lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "20K", "wish": "Phú Quý Cát Tường", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "Bánh quy", "wish": "Niềm vui phơi phới", "img": "https://cdn-icons-png.flaticon.com/512/541/541732.png"},
-        {"gift": "Bánh bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
-        {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
-        {"gift": "Kẹo Socola", "wish": "Vạn sự như mơ", "img": "https://img.pikbest.com/png-images/20241207/an-assortment-of-chocolate-truffles-garnished-with-glossy-coating_11224924.png!w700wp"},
     ]
     result = random.choice(data)
     st.session_state.result = result
@@ -229,22 +198,43 @@ elif st.session_state.state == 'view_list':
         list_html += '</div>'
         st.markdown(list_html, unsafe_allow_html=True)
     else:
-        st.markdown('<p style="text-align:center;">Chưa có ai may mắn cả!</p>', unsafe_allow_html=True)
+        st.markdown('<p style="text-align:center;">Chưa ai nhận lộc!</p>', unsafe_allow_html=True)
 
-# 6. TRANG GỬI LỜI CHÚC (MỚI)
-elif st.session_state.state == 'send_wishes':
+# 6. TRANG VIẾT LỜI CHÚC (TRANG RIÊNG)
+elif st.session_state.state == 'write_wish':
     st.markdown('<div class="title-tet">Gửi Lời Chúc Xuân</div>', unsafe_allow_html=True)
     with st.container():
-        u_name = st.text_input("Tên của bạn:", value=st.session_state.current_user)
-        u_wish = st.text_area("Lời chúc của bạn:")
-        if st.button("💌 GỬI LỜI CHÚC", use_container_width=True):
-            if u_name and u_wish:
-                st.session_state.wishes_list.insert(0, {"name": u_name, "wish": u_wish})
-                st.success("Gửi thành công!")
+        st.markdown('<div class="home-container">', unsafe_allow_html=True)
+        w_name = st.text_input("Tên người gửi:", value=st.session_state.current_user)
+        w_content = st.text_area("Lời chúc của bạn:", placeholder="Chúc mọi người năm mới hạnh phúc...")
+        if st.button("🧧 GỬI LỜI CHÚC NÀY", use_container_width=True):
+            if w_name and w_content:
+                st.session_state.wishes_list.insert(0, {"name": w_name, "wish": w_content})
+                st.balloons()
+                st.success("Lời chúc của bạn đã được dán lên tường!")
+                time.sleep(1)
+                st.session_state.state = 'view_wishes'
                 st.rerun()
+            else:
+                st.warning("Bạn quên nhập tên hoặc lời chúc rồi!")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    st.write("---")
-    for w in st.session_state.wishes_list:
-        st.markdown(f'<div class="wish-note"><b>{w["name"]}:</b> {w["wish"]}</div>', unsafe_allow_html=True)
+# 7. TRANG TRÌNH BÀY TẤT CẢ LỜI CHÚC (TRANG RIÊNG)
+elif st.session_state.state == 'view_wishes':
+    st.markdown('<div class="title-tet">Bức Tường Lời Chúc</div>', unsafe_allow_html=True)
+    if st.session_state.wishes_list:
+        for w in st.session_state.wishes_list:
+            st.markdown(f"""
+                <div class="wish-wall-item">
+                    <b>👤 {w['name']}</b>
+                    <span>{w['wish']}</span>
+                </div>
+            """, unsafe_allow_html=True)
+    else:
+        st.markdown('<p style="text-align:center;">Bức tường đang trống, hãy viết lời chúc đầu tiên!</p>', unsafe_allow_html=True)
+    
+    if st.button("✍️ VIẾT LỜI CHÚC CỦA BẠN", use_container_width=True):
+        st.session_state.state = 'write_wish'
+        st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
