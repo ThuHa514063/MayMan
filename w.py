@@ -132,7 +132,7 @@ elif st.session_state.state == 'shaking':
         {"gift": "Bánh bông lan", "wish": "Mềm Mại Hạnh Phúc", "img": "https://cdn-icons-png.flaticon.com/512/2682/2682430.png"},
         {"gift": "5K", "wish": "Tấn Tài Tấn Lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
         {"gift": "Socola", "wish": "Tình Duyên Viên Mãn", "img": "https://cdn-icons-png.flaticon.com/512/2576/2576762.png"},
-        {"gift": "1K", "wish": "Hạnh Phúc An Khang", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
+        {"gift": "1K", "wish": "Hạnh Phúc An Khang", "img": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Numismatics_and_Notaphily_icon.png"},
         {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "https://cdn-icons-png.flaticon.com/512/3225/3225096.png"},
         {"gift": "2K", "wish": "Mã Đáo Thành Công", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
         {"gift": "10K", "wish": "Phát tài phát lộc", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
