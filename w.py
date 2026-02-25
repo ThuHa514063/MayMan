@@ -144,7 +144,7 @@ with st.sidebar:
         st.session_state.state = 'view_list'
         st.rerun()
     st.write("---")
-    st.caption("Chúc mừng năm mới 2026! 🐍")
+    st.caption("Chúc mừng năm mới 2026! 🐎")
 
 # --- LOGIC CHÍNH ---
 st.markdown('<div class="main-box">', unsafe_allow_html=True)
