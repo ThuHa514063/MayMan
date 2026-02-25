@@ -35,23 +35,22 @@ st.markdown("""
         text-shadow: 3px 3px 15px #000; margin-bottom: 20px;
     }
 
-    /* FIX LỖI HIỂN THỊ KHUNG KẾT QUẢ */
     .result-card {
         display: flex; background: white; border: 6px solid #ffd700;
         border-radius: 20px; width: 100%; height: 320px;
         margin: 20px auto; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
     }
     
-    /* FIX CHỮ ĐỌC NGANG TRÁI QUA PHẢI Ở ĐÂY */
+    /* FIX CHỮ ĐỌC NGANG, KHÔNG BỊ XOAY, NẰM GIỮA */
     .card-left {
         flex: 1; background: #d32f2f; color: #ffeb3b; 
         display: flex; align-items: center; justify-content: center;
-        text-align: center; /* Căn giữa chữ */
+        text-align: center;
         font-family: 'Lexend', sans-serif;
-        font-size: 2.2rem; /* Giảm size một chút để quà dài không bị tràn */
+        font-size: 2rem; 
         font-weight: 900; padding: 15px; border-right: 5px solid #ffd700;
         text-shadow: 2px 2px 5px #000;
-        word-wrap: break-word; /* Tự xuống dòng nếu quà quá dài */
+        word-wrap: break-word;
     }
     
     .card-right { flex: 2; display: flex; flex-direction: column; background-color: #fffaf0; }
@@ -66,7 +65,6 @@ st.markdown("""
     .image-bottom { flex: 1.5; padding: 10px; display: flex; justify-content: center; align-items: center; }
     .image-bottom img { max-height: 150px; width: auto; }
 
-    /* Trang trí danh sách */
     .list-scroll {
         background: rgba(255, 255, 255, 0.9); border-radius: 15px;
         padding: 10px; max-height: 300px; overflow-y: auto; border: 4px solid #ffd700;
@@ -78,22 +76,27 @@ st.markdown("""
     .gift-label { background: #d32f2f; color: #ffeb3b; padding: 2px 10px; border-radius: 5px; font-size: 0.9rem; }
 
     .stMarkdown p, label { color: white !important; font-size: 1.1rem !important; text-shadow: 1px 1px 3px black; }
-    .petal, .lixi { position: fixed; top: -10%; z-index: 9999; animation: fall linear infinite; font-size: 25px; }
+    
+    /* Hoa và Lì xì rơi */
+    .petal, .lixi { position: fixed; top: -10%; z-index: 9999; animation: fall linear infinite; font-size: 25px; pointer-events: none; }
     @keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(110vh) rotate(360deg); } }
     
-    /* Animation ống quẻ */
     .shaker { font-size: 100px; text-align: center; margin: 20px; animation: shake 0.2s infinite; }
     @keyframes shake { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
     </style>
 
-    <div class="petal" style="left:10%; animation-duration:8s;">🌸</div>
-    <div class="lixi" style="left:35%; animation-duration:11s;">🧧</div>
-    <div class="petal" style="left:65%; animation-duration:10s;">🌸</div>
-    <div class="lixi" style="left:35%; animation-duration:11s;">🧧</div>
-    <div class="petal" style="left:65%; animation-duration:10s;">🌸</div>
-    <div class="lixi" style="left:35%; animation-duration:11s;">🧧</div>
-    <div class="petal" style="left:65%; animation-duration:10s;">🌸</div>
-    <div class="lixi" style="left:35%; animation-duration:11s;">🧧</div>
+    <div class="petal" style="left:5%; animation-duration:8s;">🌸</div>
+    <div class="lixi" style="left:25%; animation-duration:11s;">🧧</div>
+    <div class="petal" style="left:45%; animation-duration:10s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
+    <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
+    <div class="petal" style="left:5%; animation-duration:8s;">🌸</div>
+    <div class="lixi" style="left:25%; animation-duration:11s;">🧧</div>
+    <div class="petal" style="left:45%; animation-duration:10s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
+    <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
 """, unsafe_allow_html=True)
 
 # --- LOGIC ---
@@ -149,7 +152,7 @@ elif st.session_state.state == 'shaking':
     st.rerun()
 
 elif st.session_state.state == 'result':
-    st.markdown(f'<div class="title-tet">Chúc mừng năm mới {st.session_state.current_user}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="title-tet">Chúc mừng {st.session_state.current_user}</div>', unsafe_allow_html=True)
     res = st.session_state.result
     st.markdown(f"""
         <div class="result-card">
@@ -161,13 +164,14 @@ elif st.session_state.state == 'result':
         </div>
     """, unsafe_allow_html=True)
 
+    # KHAI BÁO CỘT Ở ĐÂY ĐỂ NÚT HIỆN RA
     c1, c2 = st.columns(2)
-    with col1:
-        if st.button("🧧 QUAY LẠI LẮC TIẾP", use_container_width=True):
+    with c1:
+        if st.button("🧧 LẮC TIẾP", use_container_width=True):
             st.session_state.state = 'input_name'
             st.rerun()
-    with col2:
-        if st.button("📝 DS MAY MẮN", use_container_width=True):
+    with c2:
+        if st.button("📝 DANH SÁCH", use_container_width=True):
             st.session_state.state = 'view_list'
             st.rerun()
 
@@ -184,7 +188,7 @@ elif st.session_state.state == 'view_list':
             st.session_state.lucky_list = []
             st.rerun()
     else:
-        st.write("Chưa có ai may mắn cả!")
+        st.markdown('<p style="text-align:center; color:white;">Chưa có ai may mắn cả!</p>', unsafe_allow_html=True)
 
     if st.button("⬅️ QUAY LẠI", use_container_width=True):
         st.session_state.state = 'input_name'
