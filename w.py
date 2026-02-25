@@ -88,6 +88,11 @@ st.markdown("""
     <div class="petal" style="left:45%; animation-duration:10s;">🌸</div>
     <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
     <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
+    <div class="petal" style="left:45%; animation-duration:10s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
+    <div class="petal" style="left:85%; animation-duration:12s;">🌸</div>
+    <div class="lixi" style="left:65%; animation-duration:9s;">🧧</div>
 """, unsafe_allow_html=True)
 
 # --- LOGIC ---
