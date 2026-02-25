@@ -161,6 +161,7 @@ elif st.session_state.state == 'result':
         </div>
     """, unsafe_allow_html=True)
 
+    c1, c2 = st.columns(2)
     with col1:
         if st.button("🧧 QUAY LẠI LẮC TIẾP", use_container_width=True):
             st.session_state.state = 'input_name'
