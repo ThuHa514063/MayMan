@@ -123,7 +123,7 @@ elif st.session_state.state == 'shaking':
     
     # ĐÃ FIX CÚ PHÁP TRONG DATA
     data = [
-        {"gift": "1K", "wish": "Vạn Sự Như Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
+        {"gift": "1K", "wish": "Vạn Sự Như Ý", "img": "https://banner2.cleanpng.com/lnd/20250121/re/644d576f49df54bc2e004232f05991.webp"},
         {"gift": "Bánh kẹp", "wish": "Gắn Kết Yêu Thương", "img": "https://cdn-icons-png.flaticon.com/512/3225/3225096.png"},
         {"gift": "2K", "wish": "Cát Tường Như Ý", "img": "https://cdn-icons-png.flaticon.com/512/2614/2614741.png"},
         {"gift": "10K", "wish": "Tiền Vào Như Nước", "img": "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"},
